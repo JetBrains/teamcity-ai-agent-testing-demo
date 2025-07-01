@@ -167,6 +167,8 @@ class EvaluationAggregator(buildId: String, buildName: String, slice: List<Strin
         data.parquet
         stats_per_run.json
         stats_per_task.jsonl
+        trajectories/**
+        aggregated_statistics.json
     """.trimIndent()
 
     steps {
@@ -192,9 +194,21 @@ class EvaluationAggregator(buildId: String, buildName: String, slice: List<Strin
         }
         script {
             enabled = true
-            name = "Upload statistics to YT"
+            name = "Install DuckDB dependencies"
             workingDir = repoDir
-            scriptContent = File("utilities/scripts/upload_statistics_to_yt.sh").readText()
+            scriptContent = """
+                python3 -m venv .venv
+                source .venv/bin/activate
+                pip install duckdb pandas pyarrow
+            """.trimIndent()
+        }
+        python {
+            enabled = true
+            name = "Aggregate statistics with DuckDB"
+            workingDir = repoDir
+            command = script {
+                content = File("utilities/scripts/aggregate_statistics_duckdb.py").readText()
+            }
         }
     }
 

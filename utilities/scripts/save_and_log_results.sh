@@ -17,8 +17,7 @@ fi
 echo "##teamcity[blockClosed name='Activating venv']"
 
 
-echo "##teamcity[blockOpened name='Publishing to YT']"
-export YT_CONFIG_PATCHES="{proxy={force_ipv4=%true}}"
+echo "##teamcity[blockOpened name='Preparing local artifacts']"
 set +e
 
 echo "##teamcity[blockOpened name='debug ls']"
@@ -26,53 +25,48 @@ echo "pwd is $(pwd)"
 ls
 echo "##teamcity[blockClosed name='debug ls']"
 
+# Create trajectories directory for local storage
+mkdir -p trajectories
+
+# Collect metadata
 GIT_BRANCH="%teamcity.build.vcs.branch.Matterhorn_CoreCi_HttpsGithubComJetBrainsMatterhornCore%"
 GIT_REVISION="%build.vcs.number.Matterhorn_CoreCi_HttpsGithubComJetBrainsMatterhornCore%"
 GIT_URL="%vcsroot.Matterhorn_CoreCi_HttpsGithubComJetBrainsMatterhornCore.url%"
 LATEST_COMMIT_TIMESTAMP="$(git show --no-patch --format=%ct)"
 
+# Create trajectory metadata
+cat > trajectory_metadata.json << EOF
+{
+  "trajectory_id": "%teamcity.trajectory.id%",
+  "agent_mode": "$AGENT_MODE",
+  "git_branch": "$GIT_BRANCH",
+  "git_revision": "$GIT_REVISION",
+  "git_url": "$GIT_URL",
+  "latest_commit_timestamp": "$LATEST_COMMIT_TIMESTAMP",
+  "dataset": "python-swe-bench",
+  "build_id": "%teamcity.build.id%",
+  "run_id": "%teamcity.run.id%"
+}
+EOF
 
-
-if [[ "$AGENT_MODE" != "ElectricJunior" ]]; then
-  FLAG=1
-else
-  FLAG=
+# Copy trajectory files to trajectories directory with metadata
+if [ -f "trajectory.json" ]; then
+  cp trajectory.json trajectories/
 fi
 
+if [ -f "trajectory_extended.json" ]; then
+  cp trajectory_extended.json trajectories/
+fi
+
+# For cloud agents, handle multi-trajectories
 if [ "$AGENT_MODE" = "ElectricJuniorCloud" ]; then
-# for cloud we save three trajectories and
-# full trajectory (with every candidate and critique (judge) log) as final without any suffix
-  python -m scripts.yt_upload save_matterhorn_agent_multitrajectories \
-    --git-branch="$GIT_BRANCH" \
-    --git-revision="$GIT_REVISION" \
-    --git-url="$GIT_URL" \
-    --latest-commit-timestamp="$LATEST_COMMIT_TIMESTAMP" \
-    --yt-destination="//home/matterhorn/users/robot_matterhorn/all/teamcity/trajectories" \
-    --trajectory-id="%teamcity.trajectory.id%" \
-    --dataset="python-swe-bench"
-else
-  python -m scripts.yt_upload save_matterhorn_agent_trajectory_extended \
-    --git-branch="$GIT_BRANCH" \
-    --git-revision="$GIT_REVISION" \
-    --git-url="$GIT_URL" \
-    --latest-commit-timestamp="$LATEST_COMMIT_TIMESTAMP" \
-    --yt-destination="//home/matterhorn/users/robot_matterhorn/all/teamcity/trajectories" \
-    --trajectory-id="%teamcity.trajectory.id%" \
-    --dataset="python-swe-bench" \
-    --agent_mode="$AGENT_MODE"
-
-  python -m scripts.yt_upload save_matterhorn_agent_trajectory \
-    --git-branch="$GIT_BRANCH" \
-    --git-revision="$GIT_REVISION" \
-    --git-url="$GIT_URL" \
-    --latest-commit-timestamp="$LATEST_COMMIT_TIMESTAMP" \
-    --yt-destination="//home/matterhorn/users/robot_matterhorn/python/teamcity/trajectories" \
-    --yt-destination-caches="//home/matterhorn/users/robot_matterhorn/python/teamcity/caches" \
-    --trajectory-id="%teamcity.trajectory.id%" ${FLAG:+--skip-yt-upload}
+  if [ -d "trajectory_candidates" ]; then
+    cp -r trajectory_candidates trajectories/
+  fi
 fi
 
-YT_EXIT_CODE=$?
-echo "##teamcity[blockClosed name='Publishing to YT']"
+LOCAL_EXIT_CODE=0
+echo "##teamcity[blockClosed name='Preparing local artifacts']"
 
 
 # Do not move up, it uses some artifacts from 'YT save' step
@@ -81,4 +75,4 @@ cd "%teamcity.build.checkoutDir%"
 tar -czvf matterhorn.tar.gz .matterhorn
 echo "##teamcity[blockClosed name='Matterhorn artifacts']"
 
-exit "$YT_EXIT_CODE"
+exit "$LOCAL_EXIT_CODE"

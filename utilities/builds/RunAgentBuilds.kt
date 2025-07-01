@@ -94,6 +94,10 @@ class RunAgentBuild(data: Map<String, String>, seed: Int? = null, respectQuota: 
         ${repoDir}/patch.patch
         %env.MATTERHORN_CACHES%/matterhorn.tar.gz
         idea-logs.tar.gz
+        %teamcity.build.checkoutDir%/$SWE_BENCH_DIR/trajectories/**
+        %teamcity.build.checkoutDir%/$SWE_BENCH_DIR/trajectory*.json
+        %teamcity.build.checkoutDir%/$SWE_BENCH_DIR/data.parquet
+        %teamcity.build.checkoutDir%/$SWE_BENCH_DIR/stats_per_*.json*
     """.trimIndent()
 
     steps {
@@ -190,6 +194,10 @@ class RunAgentInDockerBuild(data: Map<String, String>, seed: Int? = null, respec
         ${repoDir}/patch.patch
         %env.MATTERHORN_CACHES%/matterhorn.tar.gz
         idea-logs.tar.gz
+        /${SWE_BENCH_DIR}/trajectories/**
+        /${SWE_BENCH_DIR}/trajectory*.json
+        /${SWE_BENCH_DIR}/data.parquet
+        /${SWE_BENCH_DIR}/stats_per_*.json*
     """.trimIndent()
 
     steps {
