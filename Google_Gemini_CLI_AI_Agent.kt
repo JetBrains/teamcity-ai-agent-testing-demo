@@ -20,7 +20,7 @@ object Google_Gemini_CLI_AI_Agent : Project({
     val fiftyTasksSet = mutableListOf<Task>()
 
     subProject({
-        id("SWE_Bench_Lite_Tasks")
+        id("SWE_Bench_Lite_${agentGemini}_Tasks")
         name = "SWE-Bench Lite Tasks"
         tasks.forEachIndexed { index, task ->
             val taskConfiguration = createTaskForGeminiBuildType(task)

@@ -18,7 +18,7 @@ object JetBrain_Junie_AI_Agent : Project({
     val fiftyTasksSet = mutableListOf<Task>()
 
     subProject({
-        id("SWE_Bench_Lite_Tasks")
+        id("SWE_Bench_Lite_${agentJunie}_Tasks")
         name = "SWE-Bench Lite Tasks"
         tasks.forEachIndexed { index, task ->
             val taskConfiguration = createTaskForJunieBuildType(task)
