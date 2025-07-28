@@ -74,15 +74,15 @@ object BuildAndTestGoogleGeminiCLI: BuildType({
     }
 
     artifactRules = """
-        +:bundle/gemini.js
-        +:node/** => node.zip
+        +:bundle/gemini.js => agent.zip
+        +:node => agent.zip
         """.trimIndent()
 })
 
 fun createTaskForGeminiBuildType(taskEnv: Task) = createTaskForAgentBuildType(
    agentGemini,
-    // TODO implement artifact dependencies on an agent build
     taskEnv,
+    BuildAndTestGoogleGeminiCLI,
     listOf(
         Parameter("env.TBD", "TBD", ParameterSpecPassword(readOnly = false))
     ),

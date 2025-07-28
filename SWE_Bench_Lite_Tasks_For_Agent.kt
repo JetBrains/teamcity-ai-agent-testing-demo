@@ -1,3 +1,4 @@
+import jetbrains.buildServer.configs.kotlin.BuildType
 import jetbrains.buildServer.configs.kotlin.Parameter
 import jetbrains.buildServer.configs.kotlin.buildSteps.dockerCommand
 import jetbrains.buildServer.configs.kotlin.buildSteps.python
@@ -6,6 +7,7 @@ import java.io.File
 
 fun createTaskForAgentBuildType(agentName: String,
                                 taskEnv: Task,
+                                agentBuildConfiguration: BuildType,
                                 agentSpecificParams: List<Parameter>,
                                 runAgentScript: File,
                                 additionalArtifactRules: String? = null): Task {
@@ -42,11 +44,10 @@ fun createTaskForAgentBuildType(agentName: String,
             }
 
             // Get AI Agent
-            artifacts(DownloadJunie) {
+            artifacts(agentBuildConfiguration) {
                 buildRule = lastSuccessful()
                 artifactRules = """
-                   junie.zip!/** => .
-                   idea.tar.gz!/** => ./ide
+                   agent.zip!/** => .
                 """.trimIndent()
             }
 

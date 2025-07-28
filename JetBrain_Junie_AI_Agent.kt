@@ -45,28 +45,27 @@ object DownloadJunie: BuildType({
             scriptContent = """
                 echo "Downloading Junie ..."
                 curl -L -o junie.zip "https://github.com/jetbrains-junie/junie/releases/download/236.1/junie-cloud-eap-251.236.1-linux-amd64.zip"
+                unzip junie.zip -d junie
                 echo "Downloading Idea ..."
                 curl -L -o idea.tar.gz "https://download.jetbrains.com/idea/ideaIU-2025.1.2.tar.gz"
                 echo "Repacking Idea ..."
                 tar xzf idea.tar.gz
                 rm -f idea.tar.gz
-                cd idea*
-                tar czf ../idea.tar.gz .
-                cd ..
-                rm -rf idea
+                mv idea* ide
             """.trimIndent()
         }
     }
 
     artifactRules = """
-            +:junie.zip
-            +:idea.tar.gz
+            +:junie => agent.zip
+            +:ide => agent.zip
         """.trimIndent()
 })
 
 fun createTaskForJunieBuildType(taskEnv: Task) = createTaskForAgentBuildType(
     agentJunie,
     taskEnv,
+    DownloadJunie,
     listOf(
         Parameter("env.EJ_FOLDER_WORK", "%teamcity.build.workingDir%/.junie"),
         Parameter("env.EJ_IDE_LOCATION", "%teamcity.build.workingDir%/ide"),
