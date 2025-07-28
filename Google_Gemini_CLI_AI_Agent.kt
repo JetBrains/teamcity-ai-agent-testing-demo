@@ -83,11 +83,11 @@ object BuildAndTestGoogleGeminiCLI: BuildType({
 })
 
 fun createTaskForGeminiBuildType(taskEnv: Task) = createTaskForAgentBuildType(
-   agentGemini,
+    agentGemini,
     taskEnv,
     BuildAndTestGoogleGeminiCLI,
     listOf(
-        Parameter("env.TBD", "TBD", ParameterSpecPassword(readOnly = false))
+        Parameter("env.GEMINI_API_KEY", "credentialsJSON:2de4f99d-b3dc-4654-a636-8bee3ad0b2e6", ParameterSpecPassword(readOnly = false))
     ),
     File("scripts/run_gemini.sh"),
 )
