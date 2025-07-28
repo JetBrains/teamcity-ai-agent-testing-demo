@@ -56,28 +56,32 @@ object BuildAndTestGoogleGeminiCLI: BuildType({
 
     steps {
         script {
+            name = "Install dependencies"
             dockerImage = "node:21"
             scriptContent = """
                 npm install
             """.trimIndent()
         }
         script {
+            name = "Build Gemini CLI"
             dockerImage = "node:21"
             scriptContent = """
                 npm run build
             """.trimIndent()
         }
         script {
+            name = "Preparing artifacts"
             dockerImage = "node:21"
             scriptContent = """
                 mkdir -p node
                 cp -r /usr/local/* node/ 
+                mv bundle/gemini.{js,mjs} 
             """.trimIndent()
         }
     }
 
     artifactRules = """
-        +:bundle/gemini.js => agent.zip
+        +:bundle/gemini.mjs => agent.zip
         +:node => agent.zip!/node
         """.trimIndent()
 })
