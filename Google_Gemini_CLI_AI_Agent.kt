@@ -6,6 +6,8 @@ import jetbrains.buildServer.configs.kotlin.buildSteps.script
 import jetbrains.buildServer.configs.kotlin.vcs.GitVcsRoot
 import java.io.File
 
+const val agentGemini = "GeminiCLI"
+
 object Google_Gemini_CLI_AI_Agent : Project({
     id("Google_Gemini_CLI")
     name = "Google Gemini CLI AI Agent"
@@ -29,9 +31,9 @@ object Google_Gemini_CLI_AI_Agent : Project({
         }
     })
 
-    buildType(create_SWE_Bench_Lite_XxTaskSlice(tenTasksSet))
-    buildType(create_SWE_Bench_Lite_XxTaskSlice(thirtyTasksSet))
-    buildType(create_SWE_Bench_Lite_XxTaskSlice(fiftyTasksSet))
+    buildType(create_SWE_Bench_Lite_XxTaskSlice(tenTasksSet, agentGemini))
+    buildType(create_SWE_Bench_Lite_XxTaskSlice(thirtyTasksSet, agentGemini))
+    buildType(create_SWE_Bench_Lite_XxTaskSlice(fiftyTasksSet, agentGemini))
 })
 
 object GeminiCLI: GitVcsRoot ({
@@ -78,7 +80,7 @@ object BuildAndTestGoogleGeminiCLI: BuildType({
 })
 
 fun createTaskForGeminiBuildType(taskEnv: Task) = createTaskForAgentBuildType(
-    "GeminiCLI",
+   agentGemini,
     // TODO implement artifact dependencies on an agent build
     taskEnv,
     listOf(

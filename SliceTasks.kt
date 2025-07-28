@@ -5,11 +5,11 @@ import jetbrains.buildServer.configs.kotlin.buildSteps.python
 import java.io.File
 
 
-fun create_SWE_Bench_Lite_XxTaskSlice(tasks: List<Task>): BuildType {
+fun create_SWE_Bench_Lite_XxTaskSlice(tasks: List<Task>, agentName: String): BuildType {
     val size = tasks.size
 
     return BuildType({
-        id("${size}xTasks")
+        id("${size}xTasksFor${agentName}")
         name = "$size Tasks of SWE_Bench Lite"
 
         params {

@@ -5,6 +5,8 @@ import jetbrains.buildServer.configs.kotlin.Project
 import jetbrains.buildServer.configs.kotlin.buildSteps.script
 import java.io.File
 
+const val agentJunie = "Junie"
+
 object JetBrain_Junie_AI_Agent : Project({
     id("JetBrains_Junie")
     name = "JetBrains Junie AI Agent"
@@ -27,9 +29,9 @@ object JetBrain_Junie_AI_Agent : Project({
         }
     })
 
-    buildType(create_SWE_Bench_Lite_XxTaskSlice(tenTasksSet))
-    buildType(create_SWE_Bench_Lite_XxTaskSlice(thirtyTasksSet))
-    buildType(create_SWE_Bench_Lite_XxTaskSlice(fiftyTasksSet))
+    buildType(create_SWE_Bench_Lite_XxTaskSlice(tenTasksSet,agentJunie))
+    buildType(create_SWE_Bench_Lite_XxTaskSlice(thirtyTasksSet, agentJunie))
+    buildType(create_SWE_Bench_Lite_XxTaskSlice(fiftyTasksSet, agentJunie))
 
 })
 
@@ -63,7 +65,7 @@ object DownloadJunie: BuildType({
 })
 
 fun createTaskForJunieBuildType(taskEnv: Task) = createTaskForAgentBuildType(
-    "Junie",
+    agentJunie,
     taskEnv,
     listOf(
         Parameter("env.EJ_FOLDER_WORK", "%teamcity.build.workingDir%/.junie"),
