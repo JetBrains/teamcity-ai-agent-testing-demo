@@ -45,20 +45,21 @@ object DownloadJunie: BuildType({
             scriptContent = """
                 echo "Downloading Junie ..."
                 curl -L -o junie.zip "https://github.com/jetbrains-junie/junie/releases/download/236.1/junie-cloud-eap-251.236.1-linux-amd64.zip"
-                unzip junie.zip -d junie
+                unzip junie.zip -d .
+                rm -f junie.zip
                 echo "Downloading Idea ..."
                 curl -L -o idea.tar.gz "https://download.jetbrains.com/idea/ideaIU-2025.1.2.tar.gz"
                 echo "Repacking Idea ..."
                 tar xzf idea.tar.gz
                 rm -f idea.tar.gz
-                mv idea* ide
+                mv idea* idea
             """.trimIndent()
         }
     }
 
     artifactRules = """
-            +:junie => agent.zip
-            +:ide => agent.zip
+            +:junie => agent.zip!/junie
+            +:idea => agent.zip!/ide
         """.trimIndent()
 })
 

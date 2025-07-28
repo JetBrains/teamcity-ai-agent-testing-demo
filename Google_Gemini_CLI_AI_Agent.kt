@@ -81,7 +81,7 @@ object BuildAndTestGoogleGeminiCLI: BuildType({
 
     artifactRules = """
         +:bundle/gemini.js => agent.zip
-        +:node => agent.zip
+        +:node => agent.zip!/node
         """.trimIndent()
 })
 
