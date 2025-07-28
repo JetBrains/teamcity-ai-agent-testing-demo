@@ -27,7 +27,7 @@ fun createTaskForAgentBuildType(agentName: String,
 
             param("instance_id", taskId)
             param("solution_file", "${taskId}_solution.jsonl")
-            param("report_file", "agent.$taskId.jsonl")
+            param("report_file", "agent.$taskId.json")
             param("env.HF_HOME", "%teamcity.build.workingDir%/dataset_cache")
             param("env.HF_DATASETS_CACHE", "%teamcity.build.workingDir%/dataset_cache/datasets")
         }
