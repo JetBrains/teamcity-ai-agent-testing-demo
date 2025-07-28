@@ -75,7 +75,7 @@ object BuildAndTestGoogleGeminiCLI: BuildType({
             scriptContent = """
                 mkdir -p node
                 cp -r /usr/local/* node/ 
-                mv bundle/gemini.{js,mjs} 
+                mv bundle/gemini.js bundle/gemini.mjs
             """.trimIndent()
         }
     }
