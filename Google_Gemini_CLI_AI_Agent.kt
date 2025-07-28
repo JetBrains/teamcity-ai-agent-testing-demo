@@ -40,6 +40,9 @@ object GeminiCLI: GitVcsRoot ({
     name = "My project main repository"
     url = "https://github.com/google-gemini/gemini-cli.git"
     branch = "refs/heads/main"
+    branchSpec = """
+        +:refs/heads/*
+    """.trimIndent()
     checkoutPolicy = AgentCheckoutPolicy.USE_MIRRORS
 })
 
