@@ -55,6 +55,12 @@ object BuildAndTestGoogleGeminiCLI: BuildType({
         script {
             dockerImage = "node:21"
             scriptContent = """
+                npm install
+            """.trimIndent()
+        }
+        script {
+            dockerImage = "node:21"
+            scriptContent = """
                 npm run test
             """.trimIndent()
         }
