@@ -56,6 +56,7 @@ fun createTaskForAgentBuildType(agentName: String,
                 buildRule = lastSuccessful()
                 artifactRules = """
                     dataset_cache.zip!/** => dataset_cache
+                    dataset_cache.zip!/datasets/** => .
                 """.trimIndent()
             }
         }
