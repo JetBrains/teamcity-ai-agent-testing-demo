@@ -14,6 +14,7 @@
 
 # SWE-Bench AI Agent Testing with TeamCity
 
+[TeamCity](https://www.jetbrains.com/teamcity/use-cases/ai/) gives you a reproducible CI/CD backbone for AI agent evaluation: orchestrate parallel, isolated (Docker) runs across benchmark tasks (e.g., SWE-Bench), validate patches automatically, and capture metrics, logs, and artifacts to track performance and costs at scale via Kotlin-DSL pipelines.
 
 This TeamCity configuration provides a complete framework for testing AI agents against the SWE-Bench Lite dataset, which contains 300+ software engineering tasks from popular Python repositories.
 
