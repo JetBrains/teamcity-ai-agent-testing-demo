@@ -1,4 +1,19 @@
-# TeamCity SWE-Bench AI Agent Testing
+![Image](https://blog.jetbrains.com/wp-content/uploads/2025/08/swe-bench-ai-agent-testing-teamcity-github-1.png)
+
+<div align="center">
+<p>
+<a href="#overview">Overview</a> •
+<a href="#project-structure">Project structure</a> •
+<a href="#setup-instructions">Setup instructions</a> •
+<a href="#monitoring-and-results">Monitoring and results</a> •
+<a href="https://www.jetbrains.com/teamcity/use-cases/ai/" target="_blank">TeamCity for AI agent evaluation ↗️</a>
+</p>
+
+
+</div>
+
+# SWE-Bench AI Agent Testing with TeamCity
+
 
 This TeamCity configuration provides a complete framework for testing AI agents against the SWE-Bench Lite dataset, which contains 300+ software engineering tasks from popular Python repositories.
 
@@ -51,7 +66,7 @@ The system evaluates AI agents by:
 - **Resources**: 4+ CPU cores, 16+ GB RAM, 10+ GB free disk space
 - **Software**: Docker, Python 3.11+, git, Node.js (for Gemini CLI)
 
-**Note!**
+> **❗️ Note**
 https://demo.teamcity.com specific: agent names start with `DemoAgent4Cpu16Gb` (configurable in `SWE_Bench_Lite_TaskEnv.kt:16` and `SWE_Bench_Lite_Tasks_For_Agent.kt:18`)
 
 ## Setup Instructions
@@ -73,7 +88,7 @@ The configuration includes AWS EC2 cloud agents in `settings.kts:13-55`:
 3. Verify region settings (`eu-west-1` by default)
 
 #### Option B: Your Own Agents
-[Installing and Configuring TeamCity Build Agents](https://www.jetbrains.com/help/teamcity/install-and-start-teamcity-agents.html)
+[Installing and Configuring TeamCity Build Agents ↗️](https://www.jetbrains.com/help/teamcity/install-and-start-teamcity-agents.html)
 
 ### 3. Configure Shared Resources
 
