@@ -18,6 +18,6 @@ echo "##teamcity[blockOpened name='Running Codex']"
 echo Command:
 echo "codex exec --approval-policy never <issue>"
 codex exec \
-    --approval-policy never \
+    --dangerously-bypass-approvals-and-sandbox \
     "$(cat %teamcity.build.workingDir%/%instance_id%_issue.md)"
 echo "##teamcity[blockClosed name='Running Codex']"
