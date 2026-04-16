@@ -7,7 +7,7 @@ import java.io.File
 
 fun createTaskForAgentBuildType(agentName: String,
                                 taskEnv: Task,
-                                agentBuildConfiguration: BuildType,
+                                agentBuildConfiguration: BuildType?,
                                 agentSpecificParams: List<Parameter>,
                                 runAgentScript: File,
                                 additionalArtifactRules: String? = null): Task {
@@ -43,12 +43,14 @@ fun createTaskForAgentBuildType(agentName: String,
                 """.trimIndent()
             }
 
-            // Get AI Agent
-            artifacts(agentBuildConfiguration) {
-                buildRule = lastSuccessful()
-                artifactRules = """
-                   agent.zip!/** => .
-                """.trimIndent()
+            // Get AI Agent (optional — some agents install themselves in the run script)
+            if (agentBuildConfiguration != null) {
+                artifacts(agentBuildConfiguration) {
+                    buildRule = lastSuccessful()
+                    artifactRules = """
+                       agent.zip!/** => .
+                    """.trimIndent()
+                }
             }
 
             // Dataset cache

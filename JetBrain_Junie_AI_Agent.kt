@@ -1,8 +1,5 @@
-import jetbrains.buildServer.configs.kotlin.BuildType
 import jetbrains.buildServer.configs.kotlin.Parameter
-import jetbrains.buildServer.configs.kotlin.ParameterSpecPassword
 import jetbrains.buildServer.configs.kotlin.Project
-import jetbrains.buildServer.configs.kotlin.buildSteps.script
 import java.io.File
 
 const val agentJunie = "Junie"
@@ -10,8 +7,6 @@ const val agentJunie = "Junie"
 object JetBrain_Junie_AI_Agent : Project({
     id("JetBrains_Junie")
     name = "JetBrains Junie AI Agent"
-
-    buildType(DownloadJunie)
 
     val tenTasksSet = mutableListOf<Task>()
     val thirtyTasksSet = mutableListOf<Task>()
@@ -29,48 +24,17 @@ object JetBrain_Junie_AI_Agent : Project({
         }
     })
 
-    buildType(create_SWE_Bench_Lite_XxTaskSlice(tenTasksSet,agentJunie))
+    buildType(create_SWE_Bench_Lite_XxTaskSlice(tenTasksSet, agentJunie))
     buildType(create_SWE_Bench_Lite_XxTaskSlice(thirtyTasksSet, agentJunie))
     buildType(create_SWE_Bench_Lite_XxTaskSlice(fiftyTasksSet, agentJunie))
-
-})
-
-
-object DownloadJunie: BuildType({
-    name = "Download Junie"
-    id("DownloadJetBrainsJunie")
-
-    steps {
-        script {
-            scriptContent = """
-                echo "Downloading Junie ..."
-                curl -L -o junie.zip "https://github.com/jetbrains-junie/junie/releases/download/236.1/junie-cloud-eap-251.236.1-linux-amd64.zip"
-                unzip junie.zip -d .
-                rm -f junie.zip
-                echo "Downloading Idea ..."
-                curl -L -o idea.tar.gz "https://download.jetbrains.com/idea/ideaIU-2025.1.2.tar.gz"
-                echo "Repacking Idea ..."
-                tar xzf idea.tar.gz
-                rm -f idea.tar.gz
-                mv idea* idea
-            """.trimIndent()
-        }
-    }
-
-    artifactRules = """
-            +:junie => agent.zip!/junie
-            +:idea => agent.zip!/ide
-        """.trimIndent()
 })
 
 fun createTaskForJunieBuildType(taskEnv: Task) = createTaskForAgentBuildType(
     agentJunie,
     taskEnv,
-    DownloadJunie,
+    null,
     listOf(
-        Parameter("env.EJ_FOLDER_WORK", "%teamcity.build.workingDir%/.junie"),
-        Parameter("env.EJ_IDE_LOCATION", "%teamcity.build.workingDir%/ide"),
-        Parameter("env.EJ_AUTH_INGRAZZIO_TOKEN", "credentialsJSON:0feb5b92-0768-4e92-884d-48fe77b85a46", ParameterSpecPassword(readOnly = false))
+        Parameter("env.JUNIE_API_KEY", "%junie.api.key%"),
     ),
     File("scripts/run_junie.sh"),
     ".junie/** => junie.zip"
