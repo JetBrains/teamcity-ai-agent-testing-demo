@@ -1,4 +1,5 @@
 import jetbrains.buildServer.configs.kotlin.Parameter
+import jetbrains.buildServer.configs.kotlin.ParameterSpecPassword
 import jetbrains.buildServer.configs.kotlin.Project
 import java.io.File
 
@@ -34,7 +35,7 @@ fun createTaskForCodexBuildType(taskEnv: Task) = createTaskForAgentBuildType(
     taskEnv,
     null,
     listOf(
-        Parameter("env.CODEX_API_KEY", "%openai.api.key%"),
+        Parameter("env.CODEX_API_KEY", "credentialsJSON:74ae7a45-0597-4859-9adc-aa393d84138e", ParameterSpecPassword(readOnly = false)),
     ),
     File("scripts/run_codex.sh"),
 )
