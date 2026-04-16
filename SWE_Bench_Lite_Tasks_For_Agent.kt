@@ -10,7 +10,8 @@ fun createTaskForAgentBuildType(agentName: String,
                                 agentBuildConfiguration: BuildType?,
                                 agentSpecificParams: List<Parameter>,
                                 runAgentScript: File,
-                                additionalArtifactRules: String? = null): Task {
+                                additionalArtifactRules: String? = null,
+                                installAgentScript: File? = null): Task {
     val taskId = taskEnv.taskId
     return Task(taskId) {
         name = "$agentName Task: $taskId"
@@ -69,6 +70,12 @@ fun createTaskForAgentBuildType(agentName: String,
                 commandType = other {
                     subCommand = "load"
                     commandArgs = "-i $taskId.tar"
+                }
+            }
+            if (installAgentScript != null) {
+                script {
+                    name = "Install $agentName"
+                    scriptContent = installAgentScript.readText()
                 }
             }
             script {

@@ -38,4 +38,5 @@ fun createTaskForCodexBuildType(taskEnv: Task) = createTaskForAgentBuildType(
         Parameter("env.CODEX_API_KEY", "credentialsJSON:74ae7a45-0597-4859-9adc-aa393d84138e", ParameterSpecPassword(readOnly = false)),
     ),
     File("scripts/run_codex.sh"),
+    installAgentScript = File("scripts/install_codex.sh"),
 )
