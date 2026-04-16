@@ -7,7 +7,6 @@ project {
 
     subProject(SWE_Bench_Lite)
     subProject(JetBrain_Junie_AI_Agent)
-    subProject(Google_Gemini_CLI_AI_Agent)
 
     features {
         awsConnection() {
