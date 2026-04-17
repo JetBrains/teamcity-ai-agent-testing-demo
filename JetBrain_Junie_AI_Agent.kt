@@ -8,6 +8,10 @@ object JetBrain_Junie_AI_Agent : Project({
     id("JetBrains_Junie")
     name = "JetBrains Junie AI Agent"
 
+    params {
+        password("junie.api.key", "credentialsJSON:5af7a5f1-c8f9-4c7b-9380-2d95312cedad")
+    }
+
     val tenTasksSet = mutableListOf<Task>()
     val thirtyTasksSet = mutableListOf<Task>()
     val fiftyTasksSet = mutableListOf<Task>()
