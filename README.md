@@ -30,7 +30,7 @@ The system evaluates AI agents by:
 
 ### Projects Structure
 
-- **JetBrains Junie AI Agent** (`JetBrain_Junie_AI_Agent.kt`)
+- **JetBrains Junie AI Agent** (`JetBrains_Junie_AI_Agent.kt`)
   - Downloads Junie CLI from GitHub releases and IntelliJ IDEA
   - Creates task subsets for progressive testing
   - Individual task execution builds for all 300+ SWE-Bench tasks

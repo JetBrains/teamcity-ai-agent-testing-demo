@@ -4,7 +4,7 @@ import java.io.File
 
 const val agentJunie = "Junie"
 
-object JetBrain_Junie_AI_Agent : Project({
+object JetBrains_Junie_AI_Agent : Project({
     id("JetBrains_Junie")
     name = "JetBrains Junie AI Agent"
 

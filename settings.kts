@@ -6,7 +6,7 @@ version = "2025.03"
 project {
 
     subProject(SWE_Bench_Lite)
-    subProject(JetBrain_Junie_AI_Agent)
+    subProject(JetBrains_Junie_AI_Agent)
     subProject(OpenAI_Codex_AI_Agent)
 
     features {
