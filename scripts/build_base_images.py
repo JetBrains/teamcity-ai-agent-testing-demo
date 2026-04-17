@@ -8,6 +8,7 @@ from swebench.harness.test_spec.test_spec import make_test_spec
 DATASET_NAME = "princeton-nlp/SWE-bench_Lite"
 CACHE_DIR = "%teamcity.build.workingDir%/dataset_cache"
 OUTPUT_FILE = Path("%teamcity.build.workingDir%/base_images.txt")
+IMAGE_TAG = "latest"
 TASK_IDS = __TASK_IDS__
 
 
@@ -23,14 +24,29 @@ def main():
         missing_ids = sorted(task_ids_set - found_ids)
         raise RuntimeError(f"Missing task IDs in dataset: {missing_ids}")
 
-    base_images = sorted({make_test_spec(instance).base_image_key for instance in instances})
+    base_images = sorted(
+        {
+            make_test_spec(
+                instance,
+                instance_image_tag=IMAGE_TAG,
+                env_image_tag=IMAGE_TAG,
+            ).base_image_key
+            for instance in instances
+        }
+    )
     print("Preparing shared base images:")
     for image_name in base_images:
         print(f" - {image_name}")
 
     client = docker.from_env()
     try:
-        build_base_images(client, instances, force_rebuild=False)
+        build_base_images(
+            client,
+            instances,
+            force_rebuild=False,
+            instance_image_tag=IMAGE_TAG,
+            env_image_tag=IMAGE_TAG,
+        )
     finally:
         client.close()
 
