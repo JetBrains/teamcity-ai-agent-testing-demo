@@ -34,6 +34,13 @@ fun createTaskForAgentBuildType(agentName: String,
         }
 
         dependencies {
+            artifacts(SWE_Bench_Lite_BaseImages) {
+                buildRule = lastSuccessful()
+                artifactRules = """
+                   +:$baseImagesArchive
+                """.trimIndent()
+            }
+
             // Download Docker image from SWE-Bench task environment
             artifacts(taskEnv) {
                 buildRule = lastSuccessful()
@@ -65,6 +72,13 @@ fun createTaskForAgentBuildType(agentName: String,
         }
 
         steps {
+            dockerCommand {
+                name = "Load Base Images"
+                commandType = other {
+                    subCommand = "load"
+                    commandArgs = "-i $baseImagesArchive"
+                }
+            }
             dockerCommand {
                 name = "Load Docker Image"
                 commandType = other {

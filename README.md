@@ -42,16 +42,19 @@ The system evaluates AI agents by:
 
 - **SWE-Bench Lite** (`SWE_Bench_Lite.kt`): Core dataset and environment management
   - **Dataset Build** (`SWE_Bench_Lite_Dataset`): Downloads and caches the SWE-Bench Lite dataset
+  - **Base Image Cache** (`SWE_Bench_Lite_BaseImages`): Builds and caches shared SWE-Bench base Docker images
   - **Task Environments** (`TaskEnvironments`): 300+ builds for Docker environment preparation
   - **Task Execution**: Generic agent-agnostic task execution framework
 
 ### Step Scripts
 
 - `scripts/download_dataset.py`: Downloads SWE-Bench Lite dataset from Hugging Face Hub
+- `scripts/build_base_images.py`: Builds shared SWE-Bench base Docker images and writes the image manifest
 - `scripts/extract_task_data.py`: Extracts problem statements and hints for specific tasks
 - `scripts/calculate_statistics.py`: Aggregates evaluation results and calculates success rates
 - `scripts/formating_solution.py`: Formats agent output patches for SWE-Bench evaluation
 - `scripts/tag_task_execution.py`: Tags builds with success/failure indicators (✅❌⚠️)
+- `scripts/save_base_images.sh`: Saves the shared base-image set into a reusable Docker tar archive
 - `scripts/run_junie.sh`: Executes JetBrains Junie agent
 - `scripts/run_gemini.sh`: Executes Google Gemini CLI agent
 - `scripts/get_patch.sh`: Extracts a git patch from task execution
@@ -108,9 +111,10 @@ For Google Gemini CLI:
 ### 5. Test Basic Setup
 
 1. Run "SWE Bench Lite Dataset" build to cache the dataset
-2. Run one task environment build (e.g., `Task env: django__django-10924`)
-3. Run the corresponding task execution build for your chosen agent
-4. Verify artifacts are produced and evaluation completes
+2. Run "SWE Bench Lite Base Images" build to cache shared base Docker images
+3. Run one task environment build (e.g., `Task env: django__django-10924`)
+4. Run the corresponding task execution build for your chosen agent
+5. Verify artifacts are produced and evaluation completes
 
 ## Task Execution Workflow
 
@@ -122,7 +126,7 @@ For Google Gemini CLI:
      We build them is to avoid rebuilding the environment on every task execution.
 
 2. **Agent Execution** (`createTaskForAgentBuildType`):
-   - Loads Docker environment from previous step
+   - Loads shared base Docker images and the task-specific Docker environment from previous steps
    - Runs AI agent with problem statement
    - Extracts generated patches using `get_patch.sh`
    - Formats solutions for SWE-Bench evaluation
@@ -151,6 +155,7 @@ Task selection uses sampling only for demo purposes. You can modify the task sli
 ## Monitoring and Results
 
 ### Build Artifacts
+- **Base Images**: `base_images.tar` - Shared SWE-Bench base Docker images used during verification
 - **Docker Images**: `${taskId}.tar` - Prepared task environments
 - **Problem Statements**: `${taskId}_issue.md`, `${taskId}_hints.md`
 - **Patches**: `${taskId}.patch` - Generated code changes
