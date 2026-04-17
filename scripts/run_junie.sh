@@ -1,10 +1,13 @@
-cd /testbed || (echo "There is no /testbed directory" && exit 1)
+set -eu
 
-echo "##teamcity[blockOpened name='Installing Junie']"
-curl -fsSL https://junie.jetbrains.com/install.sh | bash
+JUNIE_HOME="%teamcity.build.workingDir%/.junie-cli-home"
+
+export HOME="$JUNIE_HOME"
 export PATH="$HOME/.local/bin:$PATH"
-junie --version
-echo "##teamcity[blockClosed name='Installing Junie']"
+
+: "${JUNIE_API_KEY:?JUNIE_API_KEY is required}"
+
+cd /testbed || (echo "There is no /testbed directory" && exit 1)
 
 echo "##teamcity[blockOpened name='Running Junie']"
 echo Command:

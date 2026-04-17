@@ -41,5 +41,6 @@ fun createTaskForJunieBuildType(taskEnv: Task) = createTaskForAgentBuildType(
         Parameter("env.JUNIE_API_KEY", "%junie.api.key%"),
     ),
     File("scripts/run_junie.sh"),
-    ".junie/** => junie.zip"
+    ".junie/** => junie.zip",
+    installAgentScript = File("scripts/install_junie.sh"),
 )
