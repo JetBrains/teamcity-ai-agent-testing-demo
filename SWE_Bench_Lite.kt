@@ -7,6 +7,7 @@ import java.io.File
 
 const val baseImagesArchive = "base_images.tar"
 const val baseImagesManifest = "base_images.txt"
+val embeddedTaskIds = taskIds.joinToString(prefix = "[", postfix = "]") { "\"$it\"" }
 
 // Generate build configurations per task ID
 val tasks = taskIds.map { taskId -> createTaskEnvBuildType(taskId) }.toList()
@@ -82,7 +83,9 @@ object SWE_Bench_Lite_BaseImages: BuildType ({
         python {
             name = "Build shared base images"
             command = script {
-                content = File("scripts/build_base_images.py").readText()
+                content = File("scripts/build_base_images.py")
+                    .readText()
+                    .replace("__TASK_IDS__", embeddedTaskIds)
             }
 
             environment = venv {

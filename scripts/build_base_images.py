@@ -1,4 +1,3 @@
-import re
 from pathlib import Path
 
 import docker
@@ -8,27 +7,18 @@ from swebench.harness.test_spec.test_spec import make_test_spec
 
 DATASET_NAME = "princeton-nlp/SWE-bench_Lite"
 CACHE_DIR = "%teamcity.build.workingDir%/dataset_cache"
-TASK_IDS_FILE = Path("dataset/swebench_lite/task_ids.kt")
 OUTPUT_FILE = Path("%teamcity.build.workingDir%/base_images.txt")
-
-
-def load_task_ids() -> list[str]:
-    task_ids_text = TASK_IDS_FILE.read_text()
-    task_ids = re.findall(r'^\s*"([^"]+)",?\s*$', task_ids_text, flags=re.MULTILINE)
-    if not task_ids:
-        raise RuntimeError(f"No task IDs found in {TASK_IDS_FILE}")
-    return task_ids
+TASK_IDS = __TASK_IDS__
 
 
 def main():
-    task_ids = load_task_ids()
-    task_ids_set = set(task_ids)
+    task_ids_set = set(TASK_IDS)
 
     print(f"Loading {DATASET_NAME} dataset using cache at {CACHE_DIR}")
     dataset = load_dataset(DATASET_NAME, cache_dir=CACHE_DIR, split="test")
 
     instances = [instance for instance in dataset if instance["instance_id"] in task_ids_set]
-    if len(instances) != len(task_ids_set):
+    if len(instances) != len(TASK_IDS):
         found_ids = {instance["instance_id"] for instance in instances}
         missing_ids = sorted(task_ids_set - found_ids)
         raise RuntimeError(f"Missing task IDs in dataset: {missing_ids}")
