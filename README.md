@@ -30,17 +30,17 @@ The system evaluates AI agents by:
 
 ### Projects Structure
 
-- **JetBrains Junie AI Agent** (`JetBrains_Junie_AI_Agent.kt`)
+- **JetBrains Junie AI Agent** (`.teamcity/JetBrains_Junie_AI_Agent.kt`)
   - Downloads Junie CLI from GitHub releases and IntelliJ IDEA
   - Creates task subsets for progressive testing
   - Individual task execution builds for all 300+ SWE-Bench tasks
   
-- **Google Gemini CLI AI Agent** (`Google_Gemini_CLI_AI_Agent.kt`)
+- **Google Gemini CLI AI Agent** (`.teamcity/Google_Gemini_CLI_AI_Agent.kt`)
   - Builds from the official Google Gemini CLI repository (`https://github.com/google-gemini/gemini-cli.git`)
   - Uses Node.js execution environment with npm build process
   - Creates task subsets for progressive testing
 
-- **SWE-Bench Lite** (`SWE_Bench_Lite.kt`): Core dataset and environment management
+- **SWE-Bench Lite** (`.teamcity/SWE_Bench_Lite.kt`): Core dataset and environment management
   - **Dataset Build** (`SWE_Bench_Lite_Dataset`): Downloads and caches the SWE-Bench Lite dataset
   - **Base Image Cache** (`SWE_Bench_Lite_BaseImages`): Builds and caches shared SWE-Bench base Docker images
   - **Task Environments** (`TaskEnvironments`): 300+ builds for Docker environment preparation
@@ -48,16 +48,16 @@ The system evaluates AI agents by:
 
 ### Step Scripts
 
-- `scripts/download_dataset.py`: Downloads SWE-Bench Lite dataset from Hugging Face Hub
-- `scripts/build_base_images.py`: Builds shared SWE-Bench base Docker images and writes the image manifest
-- `scripts/extract_task_data.py`: Extracts problem statements and hints for specific tasks
-- `scripts/calculate_statistics.py`: Aggregates evaluation results and calculates success rates
-- `scripts/formating_solution.py`: Formats agent output patches for SWE-Bench evaluation
-- `scripts/tag_task_execution.py`: Tags builds with success/failure indicators (✅❌⚠️)
-- `scripts/save_base_images.sh`: Saves the shared base-image set into a reusable Docker tar archive
-- `scripts/run_junie.sh`: Executes JetBrains Junie agent
-- `scripts/run_gemini.sh`: Executes Google Gemini CLI agent
-- `scripts/get_patch.sh`: Extracts a git patch from task execution
+- `.teamcity/scripts/download_dataset.py`: Downloads SWE-Bench Lite dataset from Hugging Face Hub
+- `.teamcity/scripts/build_base_images.py`: Builds shared SWE-Bench base Docker images and writes the image manifest
+- `.teamcity/scripts/extract_task_data.py`: Extracts problem statements and hints for specific tasks
+- `.teamcity/scripts/calculate_statistics.py`: Aggregates evaluation results and calculates success rates
+- `.teamcity/scripts/formating_solution.py`: Formats agent output patches for SWE-Bench evaluation
+- `.teamcity/scripts/tag_task_execution.py`: Tags builds with success/failure indicators (✅❌⚠️)
+- `.teamcity/scripts/save_base_images.sh`: Saves the shared base-image set into a reusable Docker tar archive
+- `.teamcity/scripts/run_junie.sh`: Executes JetBrains Junie agent
+- `.teamcity/scripts/run_gemini.sh`: Executes Google Gemini CLI agent
+- `.teamcity/scripts/get_patch.sh`: Extracts a git patch from task execution
 
 ## Prerequisites
 
@@ -71,7 +71,7 @@ The system evaluates AI agents by:
 - **Software**: Docker, Python 3.11+, git, Node.js (for Gemini CLI)
 
 > **❗️ Note**
-https://demo.teamcity.com specific: agent names start with `DemoAgent4Cpu16Gb` (configurable in `SWE_Bench_Lite_TaskEnv.kt:16` and `SWE_Bench_Lite_Tasks_For_Agent.kt:18`)
+https://demo.teamcity.com specific: agent names start with `DemoAgent4Cpu16Gb` (configurable in `.teamcity/SWE_Bench_Lite_TaskEnv.kt:16` and `.teamcity/SWE_Bench_Lite_Tasks_For_Agent.kt:18`)
 
 ## Setup Instructions
 
@@ -85,10 +85,10 @@ https://demo.teamcity.com specific: agent names start with `DemoAgent4Cpu16Gb` (
 ### 2. Configure Build Agents
 
 #### Option A: AWS Cloud Agents
-The configuration includes AWS EC2 cloud agents in `settings.kts:13-55`:
+The configuration includes AWS EC2 cloud agents in `.teamcity/settings.kts:13-55`:
 
-1. Update AWS credentials in `settings.kts:18-21`
-2. Update launch template IDs in `settings.kts:38,46,54` to match your AWS setup
+1. Update AWS credentials in `.teamcity/settings.kts:18-21`
+2. Update launch template IDs in `.teamcity/settings.kts:38,46,54` to match your AWS setup
 3. Verify region settings (`eu-west-1` by default)
 
 #### Option B: Your Own Agents
@@ -96,7 +96,7 @@ The configuration includes AWS EC2 cloud agents in `settings.kts:13-55`:
 
 ### 3. Configure Shared Resources
 
-1. **HuggingFace Connections** (`settings.kts:57-61`):
+1. **HuggingFace Connections** (`.teamcity/settings.kts:57-61`):
    - Quota limit of 20 concurrent connections to avoid rate limiting
    - Prevents 429 errors from Hugging Face Hub during dataset downloads
 
@@ -214,7 +214,7 @@ object BuildYourAgent: BuildType({
 
 ### 3. Create Agent Script
 
-Create `scripts/run_youragent.sh`:
+Create `.teamcity/scripts/run_youragent.sh`:
 ```bash
 cd /testbed
 echo "##teamcity[blockOpened name='Running Your Agent']"
