@@ -1,6 +1,6 @@
 set -eu
 
-JUNIE_HOME="%teamcity.build.workingDir%/.junie-cli-home"
+export JUNIE_HOME="%teamcity.build.workingDir%/.junie-cli-home"
 
 export HOME="$JUNIE_HOME"
 export PATH="$HOME/.local/bin:$PATH"
