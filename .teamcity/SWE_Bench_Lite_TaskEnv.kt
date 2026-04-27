@@ -4,7 +4,7 @@ import jetbrains.buildServer.configs.kotlin.sharedResources
 import java.io.File
 
 fun createTaskEnvBuildType(taskId: String): Task {
-    return Task(taskId) {
+    return Task(taskId).apply {
         id("SWE_Bench_Task_Env_$taskId".replace("-", "_"))
         name = "Task env: $taskId"
 

@@ -13,7 +13,7 @@ fun createTaskForAgentBuildType(agentName: String,
                                 additionalArtifactRules: String? = null,
                                 installAgentScript: File? = null): Task {
     val taskId = taskEnv.taskId
-    return Task(taskId) {
+    return Task(taskId).apply {
         name = "$agentName Task: $taskId"
         id("${agentName}_Task_${taskId}_Runner".replace("-", "_"))
 
